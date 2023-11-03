@@ -11,7 +11,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 class FeelingController extends AbstractController
 {
 
-    #[Route('/feeling', name: 'app_feeling')]
+    #[Route('/api/feeling', name: 'app_feeling')]
     public function getFeelings(
         FeelingRepository $feelingRepository,
         SerializerInterface $serializer,

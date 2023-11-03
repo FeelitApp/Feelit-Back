@@ -10,7 +10,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class EmotionController extends AbstractController
 {
-    #[Route('/emotion', name: 'app_emotion')]
+    #[Route('/api/emotion', name: 'app_emotion')]
     public function getEmotion(
         EmotionRepository $emotionRepository,
         SerializerInterface $serializer,

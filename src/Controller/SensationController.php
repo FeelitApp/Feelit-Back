@@ -10,7 +10,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class SensationController extends AbstractController
 {
-    #[Route('/sensation', name: 'app_sensation')]
+    #[Route('/api/sensation', name: 'app_sensation')]
     public function getSensation(
         SensationRepository $sensationRepository,
         SerializerInterface $serializer,

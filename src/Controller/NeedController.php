@@ -10,7 +10,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class NeedController extends AbstractController
 {
-    #[Route('/need', name: 'app_need')]
+    #[Route('/api/need', name: 'app_need')]
     public function getNeeds(
         NeedRepository $needRepository,
         SerializerInterface $serializer,
