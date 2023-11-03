@@ -18,7 +18,7 @@ class FeelingController extends AbstractController
     ): JsonResponse
     {
         $feelings = $feelingRepository->findAll();
-        $feelingsJson = $serializer->serialize($feelings, 'json', ['groups'=>['feelings']]);
+        $feelingsJson = $serializer->serialize($feelings, 'json');
 
         return new JsonResponse($feelingsJson, 200, [], true);
     }
