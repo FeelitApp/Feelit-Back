@@ -16,9 +16,9 @@ class Emotion
     #[ORM\Column(length: 255)]
     private ?string $content = null;
 
-    #[ORM\ManyToOne(inversedBy: 'emotions')]
+    #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?feeling $id_feeling = null;
+    private ?Feeling $feeling = null;
 
     public function getId(): ?int
     {
@@ -37,14 +37,14 @@ class Emotion
         return $this;
     }
 
-    public function getIdFeeling(): ?feeling
+    public function getFeeling(): ?Feeling
     {
-        return $this->id_feeling;
+        return $this->feeling;
     }
 
-    public function setIdFeeling(?feeling $id_feeling): static
+    public function setFeeling(?Feeling $feeling): static
     {
-        $this->id_feeling = $id_feeling;
+        $this->feeling = $feeling;
 
         return $this;
     }
