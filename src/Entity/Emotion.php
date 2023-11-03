@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\EmotionRepository;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: EmotionRepository::class)]
@@ -11,9 +12,11 @@ class Emotion
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups("emotions")]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups("emotions")]
     private ?string $content = null;
 
     #[ORM\ManyToOne(inversedBy: 'emotions')]

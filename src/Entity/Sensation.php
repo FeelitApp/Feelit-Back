@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\SensationRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: SensationRepository::class)]
 class Sensation
@@ -11,9 +12,11 @@ class Sensation
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups("sensations")]
     private ?int $id = null;
 
     #[ORM\Column(length: 510)]
+    #[Groups("sensations")]
     private ?string $content = null;
 
     #[ORM\ManyToOne(inversedBy: 'sensations')]
