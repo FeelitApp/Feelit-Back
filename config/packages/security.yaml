@@ -15,7 +15,9 @@ security:
             security: false
         main:
             lazy: true
-            provider: app_user_provider
+            stateless: true
+            custom_authenticator:
+                - App\Security\TokenAuthenticator
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall

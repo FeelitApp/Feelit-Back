@@ -105,4 +105,14 @@ class SecurityController extends AbstractController
             context: ['groups' => ['Public', 'Private']]
         );
     }
+
+    #[Route('/me', name: 'me', methods: ['GET'])]
+    public function me(): JsonResponse
+    {
+        return $this->json(
+            data: ['data' => $this->getUser()],
+            status: Response::HTTP_OK,
+            context: ['groups' => ['Public', 'Private']]
+        );
+    }
 }
