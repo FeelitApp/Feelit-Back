@@ -77,10 +77,9 @@ class SecurityController extends AbstractController
         EntityManagerInterface $entityManager
     ): JsonResponse
     {
-        $user = new User();
 
         $loginForm = $this
-            ->createForm(LoginFormType::class, $user)
+            ->createForm(LoginFormType::class)
             ->handleRequest($request);
 
         if(!$loginForm->isSubmitted() || !$loginForm->isValid()) {
@@ -90,9 +89,9 @@ class SecurityController extends AbstractController
         }
 
         $loginData = $loginForm->getData();
-        $user = $userRepository->findOneBy(['email' => $loginData->getEmail()]);
+        $user = $userRepository->findOneBy(['email' => $loginData['email']]);
 
-        if (!$user || !$passwordEncoder->isPasswordValid($user, $loginData->getPassword())) {
+        if (!$user || !$passwordEncoder->isPasswordValid($user, $loginData['password'])) {
             return $this->json(['code' => 'PASSWORD_INVALID'], Response::HTTP_BAD_REQUEST);
         }
 
