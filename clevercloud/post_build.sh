@@ -1,3 +1,1 @@
-composer require --dev orm-fixtures
 ./bin/console doctrine:migrations:migrate --no-interaction
-./bin/console doctrine:fixtures:load
