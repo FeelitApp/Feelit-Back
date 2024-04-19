@@ -53,6 +53,7 @@ class NeedsFixtures extends Fixture implements DependentFixtureInterface
             );
             $need->setContent($n[1]);
             $need->setPicture($n[2]);
+            $need->addFeeling($needToFeeling);
             $manager->persist($need);
         }
 
