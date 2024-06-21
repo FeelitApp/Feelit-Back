@@ -21,12 +21,12 @@ class TokenAuthenticator extends AbstractAuthenticator
 
     public function supports(Request $request): bool
     {
-        return $request->headers->has('user-token');
+        return $request->cookies->has('user_token');
     }
 
     public function authenticate(Request $request): SelfValidatingPassport
     {
-        $token = $request->headers->get('user-token');
+        $token = $request->cookies->get('user_token');
 
         if (empty($token)) {
             throw new CustomUserMessageAuthenticationException('No token found');

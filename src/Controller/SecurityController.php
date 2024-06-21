@@ -14,6 +14,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+
 
 /**
  * Class SecurityController
@@ -95,21 +99,53 @@ class SecurityController extends AbstractController
             return $this->json(['code' => 'PASSWORD_INVALID'], Response::HTTP_BAD_REQUEST);
         }
 
-        $user->setToken(bin2hex(openssl_random_pseudo_bytes(15)));
+        $token = bin2hex(openssl_random_pseudo_bytes(15));
+        $user->setToken($token);
         $entityManager->flush();
+
+        $cookies = Cookie::create('user_token')
+            ->withValue($token)
+            ->withExpires(strtotime('+1 week'))
+            ->withSecure(false);
 
         return $this->json(
             data: ['data' => $user],
             status: Response::HTTP_OK,
+            headers: ['Set-Cookie' => $cookies],
             context: ['groups' => ['Public', 'Private']]
         );
     }
 
+  #[Route('/logout', name: 'auth_logout', methods: ['POST'])]
+  #[IsGranted('ROLE_USER')]
+  public function logout(
+    #[CurrentUser] $user,
+    EntityManagerInterface             $entityManager,
+  ): JsonResponse
+  {
+    $user->setToken(null);
+    $entityManager->flush();
+
+    $cookies = Cookie::create('user_token')
+      ->withValue('')
+      ->withExpires(-1)
+      ->withSecure(false);
+
+    return $this->json(
+      data: null,
+      status: Response::HTTP_NO_CONTENT,
+      headers: ['Set-Cookie' => $cookies]
+    );
+  }
+
     #[Route('/me', name: 'me', methods: ['GET'])]
-    public function me(): JsonResponse
+    #[IsGranted('ROLE_USER')]
+    public function me(
+        #[CurrentUser] User $user
+    ): JsonResponse
     {
         return $this->json(
-            data: ['data' => $this->getUser()],
+            data: ['data' => $user],
             status: Response::HTTP_OK,
             context: ['groups' => ['Public', 'Private']]
         );
