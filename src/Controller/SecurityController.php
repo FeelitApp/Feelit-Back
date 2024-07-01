@@ -17,6 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use App\Form\UserInfoUpdateType;
 
 
 /**
@@ -150,4 +151,32 @@ class SecurityController extends AbstractController
             context: ['groups' => ['Public', 'Private']]
         );
     }
+
+  #[Route('/users/me', name: 'account_update_infos', methods: ['POST'])]
+  #[IsGranted('ROLE_USER')]
+  public function updateInfos(
+    #[CurrentUser] $user,
+    Request                            $request,
+    FormService                        $formService,
+    EntityManagerInterface             $entityManager,
+  ): JsonResponse
+  {
+    $userInfoForm = $this
+      ->createForm(UserInfoUpdateType::class, $user)
+      ->handleRequest($request);
+
+    if (!$userInfoForm->isSubmitted() || !$userInfoForm->isValid()) {
+      return $this->json([
+        'errors' => $formService->getFormErrors($userInfoForm),
+      ], Response::HTTP_BAD_REQUEST);
+    }
+
+    $entityManager->flush();
+
+    return $this->json(
+      data: ['data' => $user],
+      status: Response::HTTP_OK,
+      context: ['groups' => ['Private', 'Public']],
+    );
+  }
 }
