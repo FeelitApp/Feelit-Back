@@ -16,23 +16,23 @@ class Entry
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'entries')]
+    #[ORM\ManyToOne(inversedBy: 'Entries')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?user $user = null;
+    private ?User $user = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?sensation $sensation = null;
+    private ?Sensation $sensation = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?feeling $feeling = null;
+    private ?Feeling $feeling = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?emotion $emotion = null;
+    private ?Emotion $emotion = null;
 
-    #[ORM\ManyToMany(targetEntity: need::class)]
+    #[ORM\ManyToMany(targetEntity: Need::class)]
     private Collection $need;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
@@ -44,6 +44,7 @@ class Entry
     public function __construct()
     {
         $this->need = new ArrayCollection();
+        $this->created_at = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -51,48 +52,48 @@ class Entry
         return $this->id;
     }
 
-    public function getUser(): ?user
+    public function getUser(): ?User
     {
         return $this->user;
     }
 
-    public function setUser(?user $user): static
+    public function setUser(?User $user): static
     {
         $this->user = $user;
 
         return $this;
     }
 
-    public function getSensation(): ?sensation
+    public function getSensation(): ?Sensation
     {
         return $this->sensation;
     }
 
-    public function setSensation(?sensation $sensation): static
+    public function setSensation(?Sensation $sensation): static
     {
         $this->sensation = $sensation;
 
         return $this;
     }
 
-    public function getFeeling(): ?feeling
+    public function getFeeling(): ?Feeling
     {
         return $this->feeling;
     }
 
-    public function setFeeling(?feeling $feeling): static
+    public function setFeeling(?Feeling $feeling): static
     {
         $this->feeling = $feeling;
 
         return $this;
     }
 
-    public function getEmotion(): ?emotion
+    public function getEmotion(): ?Emotion
     {
         return $this->emotion;
     }
 
-    public function setEmotion(?emotion $emotion): static
+    public function setEmotion(?Emotion $emotion): static
     {
         $this->emotion = $emotion;
 
@@ -104,7 +105,7 @@ class Entry
         return $this->created_at;
     }
 
-    public function setCreatedAt(\DateTimeInterface $created_at): static
+    public function setCreatedAt(\DateTimeInterface $created_at): self
     {
         $this->created_at = $created_at;
 
@@ -131,7 +132,7 @@ class Entry
         return $this->need;
     }
 
-    public function addNeed(need $need): static
+    public function addNeed(Need $need): static
     {
         if (!$this->need->contains($need)) {
             $this->need->add($need);
@@ -140,7 +141,7 @@ class Entry
         return $this;
     }
 
-    public function removeNeed(need $need): static
+    public function removeNeed(Need $need): static
     {
         $this->need->removeElement($need);
 
