@@ -5,6 +5,9 @@ namespace App\Controller;
 use App\Entity\Entry;
 use App\Entity\User;
 use App\Form\EntryType;
+use App\Repository\EmotionRepository;
+use App\Repository\FeelingRepository;
+use App\Repository\SensationRepository;
 use App\Service\FormService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -32,14 +35,16 @@ class EntryController extends AbstractController
         Request $request,
         FormService $formService,
         EntityManagerInterface $entityManager,
+        SensationRepository $sensationRepository,
+        EmotionRepository $emotionRepository,
+        FeelingRepository $feelingRepository,
         #[CurrentUser] User $user
     ): JsonResponse
     {
         $entry = new Entry();
-        $entry->setUser($user);
 
         $entryForm = $this
-            ->createForm(EntryType::class, $entry)
+            ->createForm(EntryType::class)
             ->handleRequest($request);
 
         if (!$entryForm->isSubmitted() || !$entryForm->isValid()) {
@@ -48,9 +53,22 @@ class EntryController extends AbstractController
             ], Response::HTTP_BAD_REQUEST);
         }
 
+        $entryData = $entryForm->getData();
+
+        $sensation = $sensationRepository->findOneBy(['id' => $entryData['sensation']]);
+        $emotion = $emotionRepository->findOneBy(['id' => $entryData['emotion']]);
+        $feeling = $feelingRepository->findOneBy(['id' => $entryData['feeling']]);
+
+        $entry
+          ->setUser($user)
+          ->setSensation($sensation)
+          ->setEmotion($emotion)
+          ->setFeeling($feeling)
+          ->setComment($entryData['comment']);
+
         $entityManager->persist($entry);
         $entityManager->flush();
 
-        return $this->json(['data' => $entry], Response::HTTP_CREATED);
+        return $this->json(null, Response::HTTP_CREATED);
     }
 }
