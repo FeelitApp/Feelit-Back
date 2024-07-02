@@ -1,7 +1,5 @@
 # Documentation API REST
 
-A brief description of what this project does and who it's for
-
 ## Get list of Emotion
 
 `GET /api/emotion`
