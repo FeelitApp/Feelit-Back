@@ -190,9 +190,15 @@ class SecurityController extends AbstractController
     $entityManager->remove($user);
     $entityManager->flush();
 
+    $cookies = Cookie::create('user_token')
+      ->withValue('')
+      ->withExpires(-1)
+      ->withSecure(false);
+
     return $this->json(
       data: null,
       status: Response::HTTP_NO_CONTENT,
+      headers: ['Set-Cookie' => $cookies]
     );
   }
 }
