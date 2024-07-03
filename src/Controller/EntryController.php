@@ -27,6 +27,10 @@ class EntryController extends AbstractController
      * @param Request $request
      * @param FormService $formService
      * @param EntityManagerInterface $entityManager
+     * @param SensationRepository $sensationRepository
+     * @param EmotionRepository $emotionRepository
+     * @param FeelingRepository $feelingRepository
+     * @param NeedRepository $needRepository
      * @param User $user
      * @return JsonResponse
      */
@@ -78,5 +82,26 @@ class EntryController extends AbstractController
         $entityManager->flush();
 
         return $this->json(null, Response::HTTP_CREATED);
+    }
+
+    /**
+     * Get all entries for current User
+     *
+     * @param User $user
+     * @return JsonResponse
+     */
+    #[Route('/entry', name: 'user_entries')]
+    #[IsGranted('ROLE_USER')]
+    public function getUserEntries(
+        #[CurrentUser] User $user
+    ): JsonResponse
+    {
+        $entries = $user->getEntries();
+
+        return $this->json(
+            data: ['data' => $entries],
+            status: Response::HTTP_OK,
+            context: ['groups' => ['Public', 'Private']]
+        );
     }
 }
