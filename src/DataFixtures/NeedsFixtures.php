@@ -51,6 +51,7 @@ class NeedsFixtures extends Fixture implements DependentFixtureInterface
             $needToFeeling = $this->feelingRepository->findOneBy(
                 ['category'=>$n[0]]
             );
+            $need->addFeeling($needToFeeling);
             $need->setContent($n[1]);
             $need->setPicture($n[2]);
             $manager->persist($need);
