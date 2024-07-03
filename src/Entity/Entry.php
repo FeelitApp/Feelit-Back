@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\EntryRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -32,18 +30,18 @@ class Entry
     #[ORM\JoinColumn(nullable: false)]
     private ?Emotion $emotion = null;
 
-    #[ORM\ManyToMany(targetEntity: Need::class)]
-    private Collection $need;
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Need $need = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $created_at = null;
 
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 1000, nullable: true)]
     private ?string $comment = null;
 
     public function __construct()
     {
-        $this->need = new ArrayCollection();
         $this->created_at = new \DateTimeImmutable();
     }
 
@@ -100,6 +98,18 @@ class Entry
         return $this;
     }
 
+    public function getNeed(): ?Need
+    {
+        return $this->need;
+    }
+
+    public function setNeed(?Need $need): static
+    {
+        $this->need = $need;
+
+        return $this;
+    }
+
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->created_at;
@@ -120,30 +130,6 @@ class Entry
     public function setComment(?string $comment): static
     {
         $this->comment = $comment;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, need>
-     */
-    public function getNeed(): Collection
-    {
-        return $this->need;
-    }
-
-    public function addNeed(Need $need): static
-    {
-        if (!$this->need->contains($need)) {
-            $this->need->add($need);
-        }
-
-        return $this;
-    }
-
-    public function removeNeed(Need $need): static
-    {
-        $this->need->removeElement($need);
 
         return $this;
     }

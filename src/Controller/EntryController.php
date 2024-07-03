@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Form\EntryType;
 use App\Repository\EmotionRepository;
 use App\Repository\FeelingRepository;
+use App\Repository\NeedRepository;
 use App\Repository\SensationRepository;
 use App\Service\FormService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -38,6 +39,7 @@ class EntryController extends AbstractController
         SensationRepository $sensationRepository,
         EmotionRepository $emotionRepository,
         FeelingRepository $feelingRepository,
+        NeedRepository $needRepository,
         #[CurrentUser] User $user
     ): JsonResponse
     {
@@ -56,14 +58,20 @@ class EntryController extends AbstractController
         $entryData = $entryForm->getData();
 
         $sensation = $sensationRepository->findOneBy(['id' => $entryData['sensation']]);
-        $emotion = $emotionRepository->findOneBy(['id' => $entryData['emotion']]);
         $feeling = $feelingRepository->findOneBy(['id' => $entryData['feeling']]);
+        $emotion = $emotionRepository->findOneBy(['id' => $entryData['emotion']]);
+        if($entryData['need']) {
+            $need = $needRepository->findOneBy(['id' => $entryData['need']]);
+        } else {
+            $need = null;
+        }
 
         $entry
           ->setUser($user)
           ->setSensation($sensation)
           ->setEmotion($emotion)
           ->setFeeling($feeling)
+          ->setNeed($need)
           ->setComment($entryData['comment']);
 
         $entityManager->persist($entry);

@@ -2,12 +2,12 @@
 
 namespace App\Form;
 
-use App\Entity\Entry;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class EntryType extends AbstractType
 {
@@ -24,7 +24,16 @@ class EntryType extends AbstractType
             ->add('emotion', NumberType::class, [
                 'required' => true,
             ])
+            ->add('need', NumberType::class, [
+                'required' => false,
+            ])
             ->add('comment', TextareaType::class, [
+                'constraints' => [
+                    new Assert\Length(
+                        max: 1000,
+                        maxMessage: 'Votre commentaire ne doit pas dépasser {{ limit }} caractères.',
+                    ),
+                ],
                 'required' => false,
             ]);
     }
