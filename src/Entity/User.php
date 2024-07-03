@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Entity;
 
 use App\Repository\UserRepository;
@@ -23,9 +24,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
   #[ORM\Column]
   private ?int $id = null;
 
-  #[ORM\Column(type: Types::GUID)]
-  #[Groups('Public')]
-  private ?string $uuid = null;
+    #[ORM\Column(type: Types::GUID)]
+    #[Groups('Public')]
+    private ?string $uuid = null;
 
   #[ORM\Column]
   private array $roles = [];
@@ -47,16 +48,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
   #[ORM\OneToMany(mappedBy: 'user', targetEntity: Entry::class, orphanRemoval: true)]
   private Collection $entries;
 
-  public function __construct()
-  {
-    $this->uuid = Uuid::v4();
-    $this->entries = new ArrayCollection();
-  }
+    public function __construct()
+    {
+        $this->uuid = Uuid::v4();
+        $this->entries = new ArrayCollection();
+    }
 
-  public function getId(): ?int
-  {
-    return $this->id;
-  }
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
 
   public function getUuid(): ?string
   {
