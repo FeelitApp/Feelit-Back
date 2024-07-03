@@ -179,4 +179,20 @@ class SecurityController extends AbstractController
       context: ['groups' => ['Private', 'Public']],
     );
   }
+
+  #[Route('/users/me', name: 'account_delete', methods: ['DELETE'])]
+  #[IsGranted('ROLE_USER')]
+  public function delete(
+    #[CurrentUser] $user,
+    EntityManagerInterface             $entityManager,
+  ): JsonResponse
+  {
+    $entityManager->remove($user);
+    $entityManager->flush();
+
+    return $this->json(
+      data: null,
+      status: Response::HTTP_NO_CONTENT,
+    );
+  }
 }
