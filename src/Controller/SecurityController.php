@@ -180,7 +180,7 @@ class SecurityController extends AbstractController
     );
   }
 
-  #[Route('/users/me', name: 'account_delete', methods: ['DELETE'])]
+  #[Route('/me/delete', name: 'account_delete', methods: ['DELETE'])]
   #[IsGranted('ROLE_USER')]
   public function delete(
     #[CurrentUser] $user,
