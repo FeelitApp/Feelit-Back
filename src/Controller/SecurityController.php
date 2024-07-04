@@ -181,7 +181,7 @@ class SecurityController extends AbstractController
     );
   }
 
-  #[Route('/users/me', name: 'account_update_infos', methods: ['POST'])]
+  #[Route('/users/me/password', name: 'account_update_password', methods: ['POST'])]
   #[IsGranted('ROLE_USER')]
   public function updatePassword (
     #[CurrentUser] User $user,

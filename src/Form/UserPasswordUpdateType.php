@@ -4,7 +4,7 @@ namespace App\Form;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -19,13 +19,13 @@ class UserPasswordUpdateType extends AbstractType
             ->setMethod('POST')
             ->add('currentPassword', PasswordType::class, [
                 'constraints' => [
-                    new Assert\NotBlank(message: 'Votre mot de passe est invalide.'),
+                    new Assert\NotBlank(message: 'Veuillez renseigner votre mot de passe actuel.'),
                 ],
                 'required' => true,
             ])
             ->add('newPassword', TextType::class, [
                 'constraints' => [
-                    new Assert\NotBlank(message: 'Veuillez renseigner un mot de passe.'),
+                    new Assert\NotBlank(message: 'Veuillez renseigner un nouveau mot de passe.'),
                 ],
                 'required' => true,
             ]);
