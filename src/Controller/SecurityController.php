@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Form\LoginFormType;
 use App\Form\RegistrationFormType;
 use App\Entity\User;
+use App\Form\UserPasswordUpdateType;
 use App\Repository\UserRepository;
 use App\Service\FormService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -178,6 +179,40 @@ class SecurityController extends AbstractController
       status: Response::HTTP_OK,
       context: ['groups' => ['Private', 'Public']],
     );
+  }
+
+
+  #[Route('/users/me/password', name: 'account_update_password', methods: ['POST'])]
+  #[IsGranted('ROLE_USER')]
+  public function updatePassword (
+    #[CurrentUser] User $user,
+    Request                            $request,
+    FormService                        $formService,
+    EntityManagerInterface             $entityManager,
+    UserPasswordHasherInterface        $passwordEncoder,
+  ): JsonResponse
+  {
+    $userPasswordForm = $this
+        ->createForm(UserPasswordUpdateType::class)
+        ->handleRequest($request);
+
+    if (!$userPasswordForm->isSubmitted() || !$userPasswordForm->isValid()) {
+        return $this->json([
+            'errors' => $formService->getFormErrors($userPasswordForm),
+        ], Response::HTTP_BAD_REQUEST);
+    }
+
+    $passwordData = $userPasswordForm->getData();
+    if (!$passwordEncoder->isPasswordValid($user, $passwordData['currentPassword'])) {
+      return $this->json(['errors' => ['currentPassword' => ['Votre mot de passe est invalide']]], Response::HTTP_BAD_REQUEST);
+    }
+
+    $encodedPassword = $passwordEncoder->hashPassword($user, $passwordData['newPassword']);
+    $user->setPassword($encodedPassword);
+
+    $entityManager->flush();
+
+    return $this->json(null, Response::HTTP_NO_CONTENT);
   }
 
   #[Route('/me/delete', name: 'account_delete', methods: ['DELETE'])]
