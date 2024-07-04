@@ -181,6 +181,7 @@ class SecurityController extends AbstractController
     );
   }
 
+
   #[Route('/users/me/password', name: 'account_update_password', methods: ['POST'])]
   #[IsGranted('ROLE_USER')]
   public function updatePassword (
@@ -212,5 +213,27 @@ class SecurityController extends AbstractController
     $entityManager->flush();
 
     return $this->json(null, Response::HTTP_NO_CONTENT);
+  }
+
+  #[Route('/me/delete', name: 'account_delete', methods: ['DELETE'])]
+  #[IsGranted('ROLE_USER')]
+  public function delete(
+    #[CurrentUser] $user,
+    EntityManagerInterface             $entityManager,
+  ): JsonResponse
+  {
+    $entityManager->remove($user);
+    $entityManager->flush();
+
+    $cookies = Cookie::create('user_token')
+      ->withValue('')
+      ->withExpires(-1)
+      ->withSecure(false);
+
+    return $this->json(
+      data: null,
+      status: Response::HTTP_NO_CONTENT,
+      headers: ['Set-Cookie' => $cookies]
+    );
   }
 }

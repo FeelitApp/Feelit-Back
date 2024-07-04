@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\EntryRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: EntryRepository::class)]
 class Entry
@@ -20,24 +21,30 @@ class Entry
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups('Public')]
     private ?Sensation $sensation = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups('Public')]
     private ?Feeling $feeling = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups('Public')]
     private ?Emotion $emotion = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: true)]
+    #[Groups('Public')]
     private ?Need $need = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups('Public')]
     private ?\DateTimeInterface $created_at = null;
 
     #[ORM\Column(type: Types::STRING, length: 1000, nullable: true)]
+    #[Groups('Public')]
     private ?string $comment = null;
 
     public function __construct()

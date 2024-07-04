@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\EmotionRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: EmotionRepository::class)]
 class Emotion
@@ -11,9 +12,11 @@ class Emotion
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups('Public')]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups('Public')]
     private ?string $content = null;
 
     #[ORM\ManyToOne]

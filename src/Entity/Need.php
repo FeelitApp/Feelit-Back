@@ -6,6 +6,7 @@ use App\Repository\NeedRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: NeedRepository::class)]
 class Need
@@ -13,12 +14,15 @@ class Need
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups('Public')]
     private ?int $id = null;
 
     #[ORM\Column(length: 510)]
+    #[Groups('Public')]
     private ?string $content = null;
 
     #[ORM\Column(length: 510)]
+    #[Groups('Public')]
     private ?string $picture = null;
 
     #[ORM\ManyToMany(targetEntity: Feeling::class)]
