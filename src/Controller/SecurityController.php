@@ -203,7 +203,7 @@ class SecurityController extends AbstractController
 
     $passwordData = $userPasswordForm->getData();
     if (!$passwordEncoder->isPasswordValid($user, $passwordData['currentPassword'])) {
-      return $this->json(['errors' => 'Mot de passe invalide.'], Response::HTTP_BAD_REQUEST);
+      return $this->json(['errors' => ['currentPassword' => ['Votre mot de passe est invalide']]], Response::HTTP_BAD_REQUEST);
     }
 
     $encodedPassword = $passwordEncoder->hashPassword($user, $passwordData['newPassword']);
