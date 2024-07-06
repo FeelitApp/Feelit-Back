@@ -16,7 +16,7 @@ services:
       - .env
       - .env.test
     ports:
-      - "127.0.0.1:8000:80"
+      - "8000:80"
     volumes:
       - ./vendor:/var/www/vendor
       - ./src:/var/www/src
@@ -25,4 +25,4 @@ services:
       - ./tests:/var/www/tests
       - .phpunit.xml.dist:/var/www/phpunit.xml.dist
     depends_on:
-        - database
+      - database
