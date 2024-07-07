@@ -106,9 +106,10 @@ class SecurityController extends AbstractController
         $entityManager->flush();
 
         $cookies = Cookie::create('user_token')
-            ->withValue($token)
-            ->withExpires(strtotime('+1 week'))
-            ->withSecure(false);
+          ->withValue($token)
+          ->withExpires(strtotime('+1 week'))
+          ->withDomain($_ENV['COOKIE_DOMAIN'])
+          ->withSecure($_ENV['APP_ENV'] === 'prod');
 
         return $this->json(
             data: ['data' => $user],
@@ -129,9 +130,9 @@ class SecurityController extends AbstractController
     $entityManager->flush();
 
     $cookies = Cookie::create('user_token')
-      ->withValue('')
-      ->withExpires(-1)
-      ->withSecure(false);
+      ->withExpires(strtotime('-1'))
+      ->withDomain($_ENV['COOKIE_DOMAIN'])
+      ->withSecure($_ENV['APP_ENV'] === 'prod');
 
     return $this->json(
       data: null,
