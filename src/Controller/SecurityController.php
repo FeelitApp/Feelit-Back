@@ -37,7 +37,7 @@ class SecurityController extends AbstractController
      * @return JsonResponse
      */
 
-    #[Route('/register', name: 'register', methods: ['POST'])]
+    #[Route('api/register', name: 'register', methods: ['POST'])]
     public function register(
         Request $request,
         FormService $formService,
