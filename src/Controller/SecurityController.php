@@ -74,7 +74,7 @@ class SecurityController extends AbstractController
      * @param EntityManagerInterface $entityManager
      * @return JsonResponse
      */
-    #[Route('/login', name: 'login', methods: ['POST'])]
+    #[Route('api/login', name: 'login', methods: ['POST'])]
     public function login(
         Request $request,
         FormService $formService,
@@ -119,7 +119,7 @@ class SecurityController extends AbstractController
         );
     }
 
-  #[Route('/logout', name: 'auth_logout', methods: ['POST'])]
+  #[Route('api/logout', name: 'auth_logout', methods: ['POST'])]
   #[IsGranted('ROLE_USER')]
   public function logout(
     #[CurrentUser] $user,
@@ -141,7 +141,7 @@ class SecurityController extends AbstractController
     );
   }
 
-    #[Route('/me', name: 'me', methods: ['GET'])]
+    #[Route('api/me', name: 'me', methods: ['GET'])]
     #[IsGranted('ROLE_USER')]
     public function me(
         #[CurrentUser] User $user
@@ -154,7 +154,7 @@ class SecurityController extends AbstractController
         );
     }
 
-  #[Route('/users/me', name: 'account_update_infos', methods: ['POST'])]
+  #[Route('api/users/me', name: 'account_update_infos', methods: ['POST'])]
   #[IsGranted('ROLE_USER')]
   public function updateInfos(
     #[CurrentUser] $user,
@@ -183,7 +183,7 @@ class SecurityController extends AbstractController
   }
 
 
-  #[Route('/users/me/password', name: 'account_update_password', methods: ['POST'])]
+  #[Route('api/users/me/password', name: 'account_update_password', methods: ['POST'])]
   #[IsGranted('ROLE_USER')]
   public function updatePassword (
     #[CurrentUser] User $user,
@@ -216,7 +216,7 @@ class SecurityController extends AbstractController
     return $this->json(null, Response::HTTP_NO_CONTENT);
   }
 
-  #[Route('/me/delete', name: 'account_delete', methods: ['DELETE'])]
+  #[Route('api/me/delete', name: 'account_delete', methods: ['DELETE'])]
   #[IsGranted('ROLE_USER')]
   public function delete(
     #[CurrentUser] $user,

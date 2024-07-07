@@ -34,7 +34,7 @@ class EntryController extends AbstractController
      * @param User $user
      * @return JsonResponse
      */
-    #[Route('/entry', name: 'create_entry', methods: ['POST'])]
+    #[Route('api/entry', name: 'create_entry', methods: ['POST'])]
     #[IsGranted('ROLE_USER')]
     public function createEntry(
         Request $request,
@@ -90,7 +90,7 @@ class EntryController extends AbstractController
      * @param User $user
      * @return JsonResponse
      */
-    #[Route('/entry', name: 'user_entries')]
+    #[Route('api/entry', name: 'user_entries')]
     #[IsGranted('ROLE_USER')]
     public function getUserEntries(
         #[CurrentUser] User $user
