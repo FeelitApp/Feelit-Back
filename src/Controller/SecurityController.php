@@ -108,7 +108,6 @@ class SecurityController extends AbstractController
         $cookies = Cookie::create('user_token')
           ->withValue($token)
           ->withExpires(strtotime('+1 week'))
-          ->withDomain($_ENV['COOKIE_DOMAIN'])
           ->withSecure($_ENV['APP_ENV'] === 'prod');
 
         return $this->json(
@@ -131,7 +130,6 @@ class SecurityController extends AbstractController
 
     $cookies = Cookie::create('user_token')
       ->withExpires(strtotime('-1'))
-      ->withDomain($_ENV['COOKIE_DOMAIN'])
       ->withSecure($_ENV['APP_ENV'] === 'prod');
 
     return $this->json(
@@ -228,7 +226,6 @@ class SecurityController extends AbstractController
 
     $cookies = Cookie::create('user_token')
       ->withExpires(strtotime('-1'))
-      ->withDomain($_ENV['COOKIE_DOMAIN'])
       ->withSecure($_ENV['APP_ENV'] === 'prod');
 
     return $this->json(
