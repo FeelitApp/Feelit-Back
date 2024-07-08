@@ -145,14 +145,9 @@ class SecurityController extends AbstractController
         #[CurrentUser] User $user
     ): JsonResponse
     {
-       $cookies = Cookie::create('user_token')
-          ->withExpires(strtotime('-1'))
-          ->withSecure($_ENV['APP_ENV'] === 'prod');
-       
         return $this->json(
           data: ['data' => $user],
           status: Response::HTTP_OK,
-          headers: ['Set-Cookie' => $cookies],
           context: ['groups' => ['Public', 'Private']]
         );
     }
