@@ -2,6 +2,7 @@
 namespace App\Security;
 
 use App\Repository\UserRepository;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -46,8 +47,14 @@ class TokenAuthenticator extends AbstractAuthenticator
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
-        return new JsonResponse([
-            'code' => 'AUTHENTICATION_FAILED',
-        ], Response::HTTP_UNAUTHORIZED);
+      $cookies = Cookie::create('user_token')
+        ->withExpires(strtotime('-1'))
+        ->withSecure($_ENV['APP_ENV'] === 'prod');
+
+      $response = new JsonResponse([
+          'code' => 'AUTHENTICATION_FAILED',
+      ], Response::HTTP_UNAUTHORIZED);
+      $response->headers->setCookie($cookies);
+      return $response;
     }
 }
