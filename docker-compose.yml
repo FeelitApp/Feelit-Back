@@ -2,7 +2,7 @@ services:
   database:
     image: postgres:13.14-alpine
     ports:
-      - "127.0.0.1:3301:5432"
+      - "3301:5432"
     environment:
       POSTGRES_PASSWORD: 'postgres'
     volumes:
